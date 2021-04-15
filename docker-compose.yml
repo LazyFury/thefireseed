@@ -1,0 +1,23 @@
+version: '3'
+services:
+    mysql:
+        image: mysql:8
+        restart: always
+        container_name: share-invite-code
+        environment:
+            - MYSQL_ROOT_PASSWORD=ajsdhqewey
+            - MYSQL_USER=invite
+            - MYSQL_PASSWORD=ajsdhqewey
+            - MYSQL_DATABASE=invite
+            - MYSQL_ROOT_HOST=172.0.0.1/172.255.255.255
+            - TZ=Asia/Shanghai
+            - LANG=C.UTF-8
+            - default_authentication_plugin=mysql_native_password
+            - character-set-server=utf8mb4
+            - collation-server=utf8mb4_unicode_ci
+        volumes:
+            - ./data/mysql:/var/lib/mysql
+        security_opt:
+            - seccomp:unconfined
+        ports:
+            - '8989:3306'
