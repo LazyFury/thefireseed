@@ -21,7 +21,10 @@ func main() {
 		panic(err)
 	}
 
-	model.DB.AutoMigrate(&model.AppModel{})
+	model.DB.AutoMigrate(
+		&model.AppModel{}, &model.ActivityModel{}, &model.CodeModel{},
+		&model.User{},
+	)
 
 	// 注册模版
 	html := template.Must(tools.ParseGlob(template.New("main"), "templates", "*.html"))
