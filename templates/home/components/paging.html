@@ -1,0 +1,68 @@
+{{define "paging"}}
+<div class="flex my-4">
+    <!-- url format -->
+    {{.SetURLFormat "/?page=%d&size=%d"}}
+    <!-- 当前页面 -->
+    {{$current := .Page}}
+
+    <!-- range -->
+    <ol class="flex">
+        <!-- first -->
+        {{template "page-item" (NewPageItem (eq $current 1) `首页` (StrJoin .URLFormat 1 .Size))}}
+        <!-- first -->
+
+
+        <!-- 上一个 -->
+        {{$previous := reduce $current 1}}
+        {{if gt $previous 1}}
+        {{template "page-item" (NewPageItem (eq $current $previous) `前一页` (StrJoin .URLFormat $previous .Size))}}
+        {{end}}
+        <!-- 上一个 -->
+
+
+
+        <!-- range -->
+        {{range $i,$v := .Range}}
+        {{$index := plus $i 1}}
+        <!-- 范围 只显示当前页面前后3页 -->
+        {{$range := 3}}
+        {{$min := reduce $current $range}}
+        {{$max := plus $current $range}}
+        <!-- 如果在范围内 -->
+        {{if and (gt $index $min) (lt $index $max)}}
+        {{template "page-item" (NewPageItem (eq $current $index) (StrJoin "%d" $index) $v.URL)}}
+        {{end}}
+        {{end}}
+        <!-- range -->
+
+
+        <!-- 下一个 -->
+        {{$next := plus $current 1}}
+        {{if lt $next .Pages}}
+        {{template "page-item" (NewPageItem (eq $current $next) "下一页" (StrJoin .URLFormat $next .Size))}}
+        {{end}}
+        <!-- 下一个 -->
+
+
+        <!-- last -->
+        {{template "page-item" (NewPageItem (eq $current .Pages) "尾页" (StrJoin .URLFormat .Pages .Size))}}
+        <!-- last -->
+
+    </ol>
+
+    <span class="ml-4">
+        {{$current}}/{{.Pages}}页
+    </span>
+</div>
+{{end}}
+
+{{define "page-item"}}
+<li class="mr-2">
+    <a class="p-2 px-4 border-gary-100 bg-gray-100 rounded-md hover:bg-blue-400 hover:text-white
+    {{if .IsCurrent}}
+        bg-blue-500 text-white
+    {{end}}" href="{{.URL}}">
+        {{.Text}}
+    </a>
+</li>
+{{end}}

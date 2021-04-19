@@ -1,8 +1,8 @@
 package router
 
 import (
-	"net/http"
 	"shareInviteCode/model"
+	"shareInviteCode/utils/layout"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lazyfury/go-web-template/response"
@@ -19,7 +19,8 @@ func appDetail(c *gin.Context) {
 	}); err != nil {
 		response.Error(err)
 	}
-	c.HTML(http.StatusOK, "home/app/detail.html", map[string]interface{}{
+
+	layout.Render(c, "appDetail", map[string]interface{}{
 		"app": app,
 	})
 }

@@ -1,22 +1,16 @@
-{{template "header"}}
+{{define "homePage"}}
 <div class="mt-4">
     <div class="flex items-end">
-        <h1 class="text-2xl">推荐应用</h1>
+        <h1 class="text-xl">推荐应用</h1>
         <a href="" class="text-blue-600 ml-auto">发布应用</a>
     </div>
     <hr class="my-3">
     <div class="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-2 gap-4">
         {{range .apps}}
-        <a href="/app/{{.Code}}"
-            class="group rounded-md bg-gray-100 pb-4 text-gray-800 border-gray-200 flex flex-col items-center justify-center p-2 hover:shadow-lg">
-            <img src="{{.AppIcon}}" class="rounded-full w-16 h-16 my-6 hover:rotate-90" />
-            <h2 class="overflow-ellipsis">{{.AppName}}</h2>
-            <span class="text-sm font-mono text-gray-400 overflow-ellipsis">
-                {{.AppDesc}}
-            </span>
-            <span class="text-blue-400 text-xs">点击查看</span>
-        </a>
+        {{template "app-item" .}}
         {{end}}
     </div>
+    <!-- 分页 -->
+    {{template "paging" .paging}}
 </div>
-{{template "footer"}}
+{{end}}

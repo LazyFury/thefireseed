@@ -1,20 +1,12 @@
 package router
 
 import (
-	"net/http"
 	"shareInviteCode/controller"
 	"shareInviteCode/middleware"
+	"shareInviteCode/utils/layout"
 
 	"github.com/gin-gonic/gin"
 )
-
-func render(c *gin.Context, templatePath string, data map[string]interface{}) {
-	c.HTML(http.StatusOK, templatePath, map[string]interface{}{
-		"data":   data,
-		"header": "header",
-		"footer": "footer",
-	})
-}
 
 func Init(c *gin.RouterGroup) {
 	// api
@@ -36,8 +28,8 @@ func Init(c *gin.RouterGroup) {
 }
 
 func login(c *gin.Context) {
-	render(c, "home/login.html", map[string]interface{}{})
+	layout.New("login").Render(c)
 }
 func reg(c *gin.Context) {
-	render(c, "home/reg.html", map[string]interface{}{})
+	layout.New("reg").Render(c)
 }

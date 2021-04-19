@@ -1,20 +1,19 @@
 package main
 
 import (
-	"html/template"
 	"shareInviteCode/config"
 	"shareInviteCode/model"
 	"shareInviteCode/router"
+	"shareInviteCode/utils"
 
 	"github.com/gin-contrib/static"
-	gowebtemplate "github.com/lazyfury/go-web-template"
+	gwt "github.com/lazyfury/go-web-template"
 	"github.com/lazyfury/go-web-template/response"
-	"github.com/lazyfury/go-web-template/tools"
 )
 
 func main() {
 	// init
-	app := gowebtemplate.New()
+	app := gwt.New()
 
 	// 连接数据库
 	if err := model.DB.ConnectMysql(config.Global.Mysql.ToString()); err != nil {
@@ -27,8 +26,7 @@ func main() {
 	)
 
 	// 注册模版
-	html := template.Must(tools.ParseGlob(template.New("main"), "templates", "*.html"))
-	app.SetHTMLTemplate(html)
+	app.SetHTMLTemplate(utils.Bootstrap)
 
 	// 注册静态目录
 	app.Use(static.Serve("/static", static.LocalFile("static", false)))
