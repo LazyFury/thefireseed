@@ -2,7 +2,7 @@ package router
 
 import (
 	"shareInviteCode/model"
-	"shareInviteCode/utils/layout"
+	"shareInviteCode/utils"
 
 	"github.com/gin-gonic/gin"
 	_model "github.com/lazyfury/go-web-template/model"
@@ -17,7 +17,7 @@ func homePage(c *gin.Context) {
 		return db.Order("created_at desc")
 	})
 
-	layout.Render(c, "homePage", map[string]interface{}{
+	utils.Render(c, "homePage", map[string]interface{}{
 		"apps":   apps.Result.List.(*[]model.AppModel),
 		"paging": apps.Pagination,
 	})

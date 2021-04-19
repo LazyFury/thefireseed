@@ -1,7 +1,7 @@
-{{template "header"}}
+{{define "error"}}
 
 <div>
-    {{.Message}}
+    <h1 class="text-xl"> {{.result.Message}}</h1>
     <div>
         <span class="count"> 3</span>
         <span>秒后返回</span>
@@ -19,4 +19,4 @@
     </script>
 </div>
 
-{{template "footer"}}
+{{end}}

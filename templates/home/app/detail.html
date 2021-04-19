@@ -1,7 +1,18 @@
 {{define "appDetail"}}
-<div>
-    <h1>
-        {{.app.AppName}}
-    </h1>
+<div class="flex my-4">
+    <img class="w-24 h-24" src="{{.app.AppIcon}}" alt="{{.app.AppName}}" title="{{.app.AppName}}">
+    <div class="flex-col ml-4">
+        <h1 class="text-xl">
+            {{.app.AppName}}
+        </h1>
+        <span class="text-gray-400">{{.app.CreatedAt}}</span>
+        <p>
+            {{.app.AppDesc}}
+        </p>
+    </div>
+</div>
+<hr>
+<div class="list my-4">
+    list
 </div>
 {{end}}

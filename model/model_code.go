@@ -9,9 +9,9 @@ import (
 
 type CodeModel struct {
 	model.Model
-	ActivityID uint   `json:"activety_id" gorm:"not_null"`
-	InviteCode string `json:"code" gorm:"not_null"`
-	Used       bool   `json:"is_used"`
+	ActivityCode uint   `json:"activety_code" gorm:"not_null"`
+	InviteCode   string `json:"code" gorm:"not_null"`
+	Used         bool   `json:"is_used"`
 }
 
 var _ model.Controller = &CodeModel{}

@@ -9,7 +9,7 @@ import (
 
 type AppModel struct {
 	model.Model
-	UserID         uint   `json:"user_id" gorm:"not_null"`
+	UserCode       uint   `json:"user_code" gorm:"not_null"`
 	AppName        string `json:"app_name" gorm:"not_null"`
 	AppDesc        string `json:"app_desc" gorm:"type:text"`
 	AppIcon        string `json:"app_icon"`

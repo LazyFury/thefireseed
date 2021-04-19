@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"shareInviteCode/config"
 	"shareInviteCode/middleware"
 	"shareInviteCode/model"
 	"strconv"
@@ -12,7 +11,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lazyfury/go-web-template/controller"
 	"github.com/lazyfury/go-web-template/response"
+	"github.com/lazyfury/go-web-template/tools/crypto"
 	"github.com/lazyfury/go-web-template/tools/types"
+	"gorm.io/gorm"
 )
 
 type UserController struct {
@@ -35,6 +36,7 @@ func (u *UserController) Install(g *gin.RouterGroup, path string) {
 	controller.Install(g, u, path)
 	g.POST("/reg", u.Reg)
 	g.POST("/login", u.Login)
+	g.GET("/logout", u.Logout)
 	g.GET("/user-profile", u.Profile)
 }
 
@@ -43,6 +45,16 @@ func (u *UserController) Profile(c *gin.Context) {
 	id := strconv.Itoa(int(user.ID))
 	c.Params = []gin.Param{{Key: "id", Value: id}}
 	u.Detail(c)
+}
+
+func (u *UserController) Logout(c *gin.Context) {
+	if response.IsReqFromHTML(c) {
+		c.SetCookie("token", "", -1, "/", c.Request.Host, true, true)
+		c.Redirect(http.StatusFound, "/")
+		return
+	}
+
+	c.JSON(http.StatusOK, response.JSONSuccess("退出登录", nil))
 }
 
 // 登录
@@ -64,12 +76,16 @@ func (u *UserController) Login(c *gin.Context) {
 	var find = &model.User{}
 	if err := u.DB.GetObjectOrNotFound(find, map[string]interface{}{
 		"name": user.Name,
+	}, func(db *gorm.DB) *gorm.DB {
+		return db.Or(map[string]interface{}{
+			"email": user.Name,
+		})
 	}); err != nil {
 		response.Error(response.JSON(response.NotFound, "用户不存在", nil))
 	}
 
 	// 比对密码
-	user.Password = config.Global.Sha1.EnCode(user.Password)
+	user.Password = crypto.SHA256String(user.Password)
 	if find.Password != user.Password {
 		response.Error(response.JSON(response.AuthedError, "用户密码错误", nil))
 	}
@@ -82,7 +98,9 @@ func (u *UserController) Login(c *gin.Context) {
 
 	str, _ := middleware.CreateToken(*find)
 	if response.IsReqFromHTML(c) {
+		c.SetCookie("token", str, 86400, "/", c.Request.Host, true, true)
 		c.Redirect(http.StatusFound, "/")
+		return
 	}
 	c.JSON(http.StatusOK, response.JSON(response.LoginSuccess, "", str))
 }
@@ -105,6 +123,13 @@ func (u *UserController) Reg(c *gin.Context) {
 	// 创建用户
 	if err := u.DB.Create(user).Error; err != nil {
 		response.Error(err)
+	}
+
+	str, _ := middleware.CreateToken(*user)
+	if response.IsReqFromHTML(c) {
+		c.SetCookie("token", str, 86400, "/", c.Request.Host, true, true)
+		c.Redirect(http.StatusFound, "/")
+		return
 	}
 
 	c.JSON(http.StatusCreated, response.JSON(response.StatusCreated, "注册成功", &struct {

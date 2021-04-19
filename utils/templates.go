@@ -2,9 +2,11 @@ package utils
 
 import (
 	"fmt"
-	"html/template"
+	"shareInviteCode/controller"
+	"shareInviteCode/model"
 
-	"github.com/lazyfury/go-web-template/tools"
+	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-template/tools/template/layout"
 )
 
 type (
@@ -16,9 +18,14 @@ type (
 	}
 )
 
-var (
-	Bootstrap = template.Must(tools.ParseGlob(template.New("main").Funcs(TemplateFuncs), "templates", "*.html"))
-)
+func Render(c *gin.Context, name string, args ...map[string]interface{}) {
+	layout := layout.New(name, args...)
+
+	user := controller.GetUserOrEmpty(c)
+	layout.Header["user"] = user
+
+	layout.Render(c)
+}
 
 var TemplateFuncs = map[string]interface{}{
 	"plus": func(x int, y int) int {
@@ -36,5 +43,8 @@ var TemplateFuncs = map[string]interface{}{
 			Text:      text,
 			URL:       url,
 		}
+	},
+	"hasUser": func(user *model.User) bool {
+		return user.ID > 0
 	},
 }

@@ -9,7 +9,7 @@ import (
 
 type ActivityModel struct {
 	model.Model
-	AppId        uint   `json:"app_id"`
+	AppCode      uint   `json:"app_code"`
 	ActivityName string `json:"activity_name"`
 }
 

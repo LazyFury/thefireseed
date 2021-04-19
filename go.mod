@@ -8,6 +8,8 @@ require (
 	github.com/gin-gonic/gin v1.7.1
 
 	//还在丧心病狂的迭代，所以不要更新了
-	github.com/lazyfury/go-web-template v1.0.20
+	github.com/lazyfury/go-web-template v1.0.22
 	gorm.io/gorm v1.21.7
 )
+
+// replace github.com/lazyfury/go-web-template => /Users/suke/Documents/project/go-web-template

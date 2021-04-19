@@ -1,12 +1,12 @@
 package model
 
 import (
-	"shareInviteCode/config"
 	"strings"
 	"time"
 
 	"github.com/lazyfury/go-web-template/model"
 	"github.com/lazyfury/go-web-template/response"
+	"github.com/lazyfury/go-web-template/tools/crypto"
 	"github.com/lazyfury/go-web-template/tools/types"
 	"gorm.io/gorm"
 )
@@ -21,7 +21,7 @@ type User struct {
 	model.Model
 	Password  string          `json:"password" form:"password" gorm:"<-;not null;type:text"`
 	Name      string          `json:"name" form:"name" gorm:"unique;not null"`
-	Email     string          `json:"email"`
+	Email     string          `json:"email" form:"email"`
 	IP        string          `json:"ip"`
 	Ua        string          `json:"ua"`
 	LoginTime types.LocalTime `json:"login_time"`
@@ -45,7 +45,7 @@ func (u *User) Validator() error {
 		response.Error(response.JSONError("用户密码不可空", nil))
 	}
 
-	u.Password = config.Global.Sha1.EnCode(u.Password)
+	u.Password = crypto.SHA256String(u.Password)
 	u.LoginTime = types.LocalTime{Time: time.Now()}
 
 	// 查询重复的昵称

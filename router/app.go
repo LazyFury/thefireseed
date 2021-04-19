@@ -2,7 +2,7 @@ package router
 
 import (
 	"shareInviteCode/model"
-	"shareInviteCode/utils/layout"
+	"shareInviteCode/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lazyfury/go-web-template/response"
@@ -20,7 +20,7 @@ func appDetail(c *gin.Context) {
 		response.Error(err)
 	}
 
-	layout.Render(c, "appDetail", map[string]interface{}{
+	utils.Render(c, "appDetail", map[string]interface{}{
 		"app": app,
 	})
 }

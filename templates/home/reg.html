@@ -3,5 +3,20 @@
     <h1>
         reg
     </h1>
+    <form action="/api/reg" method="post">
+        <input type="text" name="name" placeholder="username...">
+        <input type="text" name="password" placeholder="password...">
+        <input type="text" name="email" placeholder="password...">
+
+        <button type="submit">提交</button>
+    </form>
+
+
+    <script>
+        function submit(e) {
+            console.log(e)
+            return false
+        }
+    </script>
 </div>
 {{end}}

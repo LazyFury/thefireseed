@@ -21,16 +21,29 @@
             <div class="flex-none py-1 px-2 bg-gray-200 text-2xl">logo</div>
             <nav class="mx-2 ml-4">
                 <ol class="flex">
+                    <li class="mr-2">
+                        <a href="/" class="{{if eq .path `/`}} text-blue-600 {{end}}">首页</a>
+                    </li>
                     <li>
-                        <a href="/">首页</a>
+                        <a href="/about" class="{{if eq .path `/about`}} text-blue-600 {{end}}">关于</a>
                     </li>
                 </ol>
             </nav>
-            <nav class="ml-auto">
+            <nav class="ml-auto flex">
+
                 <ol class="flex">
-                    <li class="text-blue-600"><a href="/login">登录</a></li>
+                    {{if and .user .user.ID}}
+                    <li class="hover:text-blue-600 mr-2"><a href="/profile">{{if
+                            .user.Name}}{{.user.Name}}{{else}}未知用户{{end}}</a>
+                    </li>
+                    <li class="hover:text-blue-600">
+                        <a href="/logout">退出登录</a>
+                    </li>
+                    {{else}}
+                    <li class="hover:text-blue-600"><a href="/login">登录</a></li>
                     <li class="mx-2">/</li>
-                    <li><a href="/reg">注册</a></li>
+                    <li class="hover:text-blue-600"><a href="/reg">注册</a></li>
+                    {{end}}
                 </ol>
             </nav>
         </div>
