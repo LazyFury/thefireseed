@@ -48,11 +48,9 @@ func (u *UserController) Profile(c *gin.Context) {
 // 登录
 func (u *UserController) Login(c *gin.Context) {
 	user := &model.User{}
-
-	if err := c.ShouldBindJSON(user); err != nil {
+	if err := c.Bind(user); err != nil {
 		response.Error(response.JSON(response.InvalidJSONData, "", err))
 	}
-
 	// check
 	user.Name = strings.Trim(user.Name, " ")
 	if user.Name == "" {
@@ -83,6 +81,9 @@ func (u *UserController) Login(c *gin.Context) {
 	}
 
 	str, _ := middleware.CreateToken(*find)
+	if response.IsReqFromHTML(c) {
+		c.Redirect(http.StatusFound, "/")
+	}
 	c.JSON(http.StatusOK, response.JSON(response.LoginSuccess, "", str))
 }
 
@@ -90,7 +91,7 @@ func (u *UserController) Login(c *gin.Context) {
 func (u *UserController) Reg(c *gin.Context) {
 	user := &model.User{}
 
-	if err := c.ShouldBindJSON(user); err != nil {
+	if err := c.ShouldBind(user); err != nil {
 		response.Error(response.JSON(response.InvalidJSONData, "", err))
 	}
 

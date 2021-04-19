@@ -19,8 +19,8 @@ type UserID struct {
 // User 用户更新
 type User struct {
 	model.Model
-	Password  string          `json:"password" gorm:"<-;not null;type:text"`
-	Name      string          `json:"name" gorm:"unique;not null"`
+	Password  string          `json:"password" form:"password" gorm:"<-;not null;type:text"`
+	Name      string          `json:"name" form:"name" gorm:"unique;not null"`
 	Email     string          `json:"email"`
 	IP        string          `json:"ip"`
 	Ua        string          `json:"ua"`

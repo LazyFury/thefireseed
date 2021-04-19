@@ -1,0 +1,51 @@
+{{define "header"}}
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- tailwind css  -->
+    <link href="https://unpkg.com/tailwindcss@^2.1.0/dist/tailwind.min.css" rel="stylesheet" />
+    <!-- jquery  -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+
+<body class="flex-column min-h-screen">
+    <!-- header  -->
+    <header class="bg-gray-100 p-2">
+        <div class="sticky top-0 z-40 lg:z-50 w-full max-w-screen-lg mx-auto flex-none flex items-center">
+            <div class="flex-none py-1 px-2 bg-gray-200">logo</div>
+            <nav class="mx-2 ml-4">
+                <ol class="flex">
+                    <li>
+                        <a href="/">首页</a>
+                    </li>
+                </ol>
+            </nav>
+            <nav class="ml-auto">
+                <ol class="flex">
+                    <li class="text-blue-600"><a href="/login">登录</a></li>
+                    <li class="mx-2">/</li>
+                    <li><a href="/reg">注册</a></li>
+                </ol>
+            </nav>
+        </div>
+    </header>
+    <!-- main  -->
+    <main class="w-full max-w-screen-lg mx-auto mt-2" style="min-height: 500px;">{{end}}
+        {{define "footer"}}</main>
+
+    <!-- footer  -->
+    <footer>
+        <div class="w-full max-w-screen-lg mx-auto text-gray-400">
+            footer.
+        </div>
+    </footer>
+</body>
+
+</html>
+{{end}}

@@ -1,0 +1,22 @@
+{{template "header"}}
+
+<div>
+    {{.Message}}
+    <div>
+        <span class="count"> 3</span>
+        <span>秒后返回</span>
+    </div>
+    <script>
+        $(document).ready(function () {
+            var count = 3
+            setInterval(() => {
+                document.querySelector(".count").innerHTML = count--
+            }, 1000)
+            setTimeout(() => {
+                history.go(-1)
+            }, 3600)
+        })
+    </script>
+</div>
+
+{{template "footer"}}

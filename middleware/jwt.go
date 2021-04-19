@@ -60,21 +60,21 @@ var (
 func getToken(c *gin.Context) (token string, err error) {
 	// query
 	token = c.Query("token")
-	req := c.Request
+	req := c.Copy().Request
 	if token != "" {
 		return
 	}
 
-	// post
-	token = c.PostForm("token")
-	if token != "" {
-		return
-	}
+	// // post
+	// token = c.Copy().PostForm("token")
+	// if token != "" {
+	// 	return
+	// }
 
-	token = req.FormValue("token")
-	if token != "" {
-		return
-	}
+	// token = req.FormValue("token")
+	// if token != "" {
+	// 	return
+	// }
 
 	// header
 	token = req.Header.Get("token")

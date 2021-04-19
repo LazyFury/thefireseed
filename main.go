@@ -31,14 +31,14 @@ func main() {
 	app.SetHTMLTemplate(html)
 
 	// 注册静态目录
-	app.Use(static.Serve("/", static.LocalFile("wwwroot", false)))
+	app.Use(static.Serve("/static", static.LocalFile("static", false)))
 
 	// 注册路由
 	router.Init(&app.RouterGroup)
 
 	// 错误码配置
 	response.RecoverErrHtml = false
-
+	response.RecoverErrTemplateName = "err/error.html"
 	// run
 	app.Run()
 }
