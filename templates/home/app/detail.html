@@ -11,8 +11,15 @@
         </p>
     </div>
 </div>
+<h1 class="mt-4 mb-2">进行中的活动</h1>
 <hr>
-<div class="list my-4">
-    list
+<div class="list">
+    {{range .activities}}
+    <li class="hover:text-blue-600">
+        <a href="/activities/{{.Code}}">{{.ActivityName}}</a>
+    </li>
+    {{end}}
 </div>
+{{template "paging" .paging}}
+
 {{end}}

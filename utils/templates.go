@@ -2,6 +2,8 @@ package utils
 
 import (
 	"fmt"
+	"log"
+	"reflect"
 	"shareInviteCode/controller"
 	"shareInviteCode/model"
 
@@ -16,14 +18,67 @@ type (
 		Text      string
 		URL       string
 	}
+
+	SEO struct {
+		Title     string
+		BaseTitle string
+		Keyworkds string
+		Desc      string
+	}
+
+	UserParam map[string]interface{}
 )
 
-func Render(c *gin.Context, name string, args ...map[string]interface{}) {
-	layout := layout.New(name, args...)
+func DefaultSEO() *SEO {
+	return &SEO{
+		BaseTitle: "分享邀请码",
+		Keyworkds: "分享",
+		Desc:      "邀请码",
+	}
+}
+
+func (s *SEO) SetTitle(title string) {
+	s.Title = title
+}
+
+func parseRenderParams(args ...interface{}) (maps []map[string]interface{}, seo *SEO) {
+	for _, arg := range args {
+		// data 里的数据
+		log.Print(reflect.ValueOf(arg).Type())
+		data, ok := arg.(UserParam)
+		if ok {
+			maps = append(maps, data)
+			continue
+		}
+
+		// seo
+		_seo, ok := arg.(*SEO)
+		if ok {
+			seo = _seo
+			continue
+		}
+
+	}
+	return
+}
+
+// Render 渲染模版并提供公共参数
+func Render(c *gin.Context, name string, args ...interface{}) {
+	maps, seo := parseRenderParams(args...)
+	layout := layout.New(name, maps...)
 
 	user := controller.GetUserOrEmpty(c)
+
+	// user
 	layout.Header["user"] = user
 
+	// seo
+	if seo == nil {
+		seo = DefaultSEO()
+	}
+	layout.Header["seo"] = seo
+
+	// rander
 	layout.Render(c)
 }
 
@@ -46,5 +101,8 @@ var TemplateFuncs = map[string]interface{}{
 	},
 	"hasUser": func(user *model.User) bool {
 		return user.ID > 0
+	},
+	"emptyStr": func(str string) bool {
+		return str == ""
 	},
 }

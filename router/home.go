@@ -17,7 +17,7 @@ func homePage(c *gin.Context) {
 		return db.Order("created_at desc")
 	})
 
-	utils.Render(c, "homePage", map[string]interface{}{
+	utils.Render(c, "homePage", utils.UserParam{
 		"apps":   apps.Result.List.(*[]model.AppModel),
 		"paging": apps.Pagination,
 	})

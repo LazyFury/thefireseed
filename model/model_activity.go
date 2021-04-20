@@ -9,13 +9,17 @@ import (
 
 type ActivityModel struct {
 	model.Model
-	AppCode      uint   `json:"app_code"`
+	AppCode      string `json:"app_code"`
 	ActivityName string `json:"activity_name"`
 }
 
 var _ model.Controller = &ActivityModel{}
 
 func (a *ActivityModel) Validator() error {
+
+	if a.AppCode == "" {
+		response.Error("请输入App Code")
+	}
 
 	a.ActivityName = strings.Trim(a.ActivityName, " ")
 	if a.ActivityName == "" {

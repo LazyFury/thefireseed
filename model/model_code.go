@@ -9,7 +9,7 @@ import (
 
 type CodeModel struct {
 	model.Model
-	ActivityCode uint   `json:"activety_code" gorm:"not_null"`
+	ActivityCode string `json:"activety_code" gorm:"not_null"`
 	InviteCode   string `json:"code" gorm:"not_null"`
 	Used         bool   `json:"is_used"`
 }
@@ -19,7 +19,7 @@ var _ model.Controller = &CodeModel{}
 func (a *CodeModel) Validator() error {
 	a.Code = strings.Trim(a.Code, " ")
 	if a.Code == "" {
-		response.Error("请输入活动名称")
+		response.Error("请输入活动Code")
 	}
 	return nil
 }

@@ -1,16 +1,17 @@
 {{define "paging"}}
 <div class="flex my-4">
+    {{if .Total}}
     <!-- url format -->
-    {{.SetURLFormat "/?page=%d&size=%d"}}
+    {{if emptyStr .URLFormat}}
+    {{.SetURLFormat "?page=%d&size=%d"}}
+    {{end}}
     <!-- 当前页面 -->
     {{$current := .Page}}
-
     <!-- range -->
     <ol class="flex">
         <!-- first -->
         {{template "page-item" (NewPageItem (eq $current 1) `首页` (StrJoin .URLFormat 1 .Size))}}
         <!-- first -->
-
 
         <!-- 上一个 -->
         {{$previous := reduce $current 1}}
@@ -18,7 +19,6 @@
         {{template "page-item" (NewPageItem (eq $current $previous) `前一页` (StrJoin .URLFormat $previous .Size))}}
         {{end}}
         <!-- 上一个 -->
-
 
 
         <!-- range -->
@@ -43,7 +43,6 @@
         {{end}}
         <!-- 下一个 -->
 
-
         <!-- last -->
         {{template "page-item" (NewPageItem (eq $current .Pages) "尾页" (StrJoin .URLFormat .Pages .Size))}}
         <!-- last -->
@@ -53,6 +52,9 @@
     <span class="ml-4">
         {{$current}}/{{.Pages}}页
     </span>
+    {{else}}
+    <span>没有数据.</span>
+    {{end}}
 </div>
 {{end}}
 
