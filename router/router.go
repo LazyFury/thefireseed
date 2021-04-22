@@ -14,8 +14,11 @@ func Init(c *gin.RouterGroup) {
 	api := c.Group("/api")
 	controller.NewAppController().Install(api, "/apps")
 	controller.NewActivityController().Install(api, "/activities")
-	controller.NewCodeController().Install(api, "/activities/:id/codes")
-	controller.NewUserController().Install(api, "/users")
+	controller.NewCodeController().Install(api, "/codes")
+	controller.NewCodeLogsController().Install(api, "/code-copy-logs")
+
+	userController := controller.NewUserController()
+	userController.Install(api, "/users")
 
 	// 前端模板
 	app := c.Group("")
@@ -26,6 +29,6 @@ func Init(c *gin.RouterGroup) {
 	// 登录
 	app.GET("/login", login)
 	app.GET("/reg", reg)
-	app.GET("/logout", controller.NewUserController().Logout)
+	app.GET("/logout", userController.Logout)
 
 }

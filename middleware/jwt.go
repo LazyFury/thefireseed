@@ -107,12 +107,12 @@ func CreateToken(u model.User) (token string, err error) {
 func CreateTokenMaxAge(u model.User, maxAge int64) (tokens string, err error) {
 	//自定义claim
 	claim := jwt.MapClaims{
-		"id":      u.ID,
-		"nick":    u.Name,
-		"headPic": "",
-		"nbf":     time.Now().Unix(),          //指定时间之前 token不可用
-		"iat":     time.Now().Unix(),          //签发时间
-		"exp":     time.Now().Unix() + maxAge, //过期时间 24小时
+		"id":   u.ID,
+		"nick": u.Name,
+		"code": u.Code,
+		"nbf":  time.Now().Unix(),          //指定时间之前 token不可用
+		"iat":  time.Now().Unix(),          //签发时间
+		"exp":  time.Now().Unix() + maxAge, //过期时间 24小时
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 	tokens, err = token.SignedString([]byte(SECRET))
@@ -147,7 +147,7 @@ func parseToken(tokens string) (user *model.User, err error) {
 	user = &model.User{}
 	user.ID = uint(claim["id"].(float64)) // uint64(claim["id"].(float64))
 	user.Name = claim["nick"].(string)
-	// user.HeadPic = claim["headPic"].(string)
+	user.Code, _ = claim["code"].(string)
 
 	exp := int64(claim["exp"].(float64))
 	fmt.Println(user.Name, "过期时间=====", time.Unix(exp, 0).Format("2001-01-02 15:04:05"))

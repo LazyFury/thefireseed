@@ -1,9 +1,23 @@
 version: '3'
 services:
+    dev:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        restart: always
+        ports:
+            - 1334:8080
+        depends_on:
+            - mysql
+        links:
+            - mysql:mysql
+        volumes:
+            - ./:/root/app
+        command: /bin/bash -c  "cd /root/app/;air" #./run.sh ./debug_bin;
+
     mysql:
         image: mysql:8
         restart: always
-        container_name: share-invite-code
         environment:
             - MYSQL_ROOT_PASSWORD=ajsdhqewey
             - MYSQL_USER=invite

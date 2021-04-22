@@ -2,8 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"log"
-	"reflect"
 	"shareInviteCode/controller"
 	"shareInviteCode/model"
 
@@ -22,8 +20,9 @@ type (
 	SEO struct {
 		Title     string
 		BaseTitle string
-		Keyworkds string
+		Keywords  string
 		Desc      string
+		Author    string
 	}
 
 	UserParam map[string]interface{}
@@ -32,19 +31,20 @@ type (
 func DefaultSEO() *SEO {
 	return &SEO{
 		BaseTitle: "分享邀请码",
-		Keyworkds: "分享",
+		Keywords:  "分享",
 		Desc:      "邀请码",
 	}
 }
 
-func (s *SEO) SetTitle(title string) {
+func (s *SEO) SetTitle(title string) *SEO {
 	s.Title = title
+	return s
 }
 
 func parseRenderParams(args ...interface{}) (maps []map[string]interface{}, seo *SEO) {
 	for _, arg := range args {
 		// data 里的数据
-		log.Print(reflect.ValueOf(arg).Type())
+		// log.Print(reflect.ValueOf(arg).Type())
 		data, ok := arg.(UserParam)
 		if ok {
 			maps = append(maps, data)
@@ -63,6 +63,7 @@ func parseRenderParams(args ...interface{}) (maps []map[string]interface{}, seo 
 }
 
 // Render 渲染模版并提供公共参数
+// @params args   SEO,UserParam
 func Render(c *gin.Context, name string, args ...interface{}) {
 	maps, seo := parseRenderParams(args...)
 	layout := layout.New(name, maps...)

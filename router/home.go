@@ -20,5 +20,5 @@ func homePage(c *gin.Context) {
 	utils.Render(c, "homePage", utils.UserParam{
 		"apps":   apps.Result.List.(*[]model.AppModel),
 		"paging": apps.Pagination,
-	})
+	}, utils.DefaultSEO().SetTitle("home"))
 }

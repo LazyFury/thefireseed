@@ -49,7 +49,7 @@ func (u *UserController) Profile(c *gin.Context) {
 
 func (u *UserController) Logout(c *gin.Context) {
 	if response.IsReqFromHTML(c) {
-		c.SetCookie("token", "", -1, "/", c.Request.Host, true, true)
+		c.SetCookie("token", "", -1, "/", "", true, true)
 		c.Redirect(http.StatusFound, "/")
 		return
 	}
@@ -98,7 +98,7 @@ func (u *UserController) Login(c *gin.Context) {
 
 	str, _ := middleware.CreateToken(*find)
 	if response.IsReqFromHTML(c) {
-		c.SetCookie("token", str, 86400, "/", c.Request.Host, true, true)
+		c.SetCookie("token", str, 86400, "/", "", true, true)
 		c.Redirect(http.StatusFound, "/")
 		return
 	}
@@ -127,7 +127,7 @@ func (u *UserController) Reg(c *gin.Context) {
 
 	str, _ := middleware.CreateToken(*user)
 	if response.IsReqFromHTML(c) {
-		c.SetCookie("token", str, 86400, "/", c.Request.Host, true, true)
+		c.SetCookie("token", str, 86400, "/", "", true, true)
 		c.Redirect(http.StatusFound, "/")
 		return
 	}

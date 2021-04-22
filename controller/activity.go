@@ -6,10 +6,10 @@ import (
 	"github.com/lazyfury/go-web-template/controller"
 )
 
-func NewAppController() *controller.Controller {
+func NewActivityController() *controller.Controller {
 	return &controller.Controller{
 		DB:    model.DB,
-		Model: &model.AppModel{},
+		Model: &model.ActivityModel{},
 		Auth:  Auth,
 	}
 }

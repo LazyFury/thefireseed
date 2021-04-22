@@ -1,5 +1,52 @@
 {{define "activityDetail"}}
-<div>
-    detail
+<div class="flex mt-4 items-start">
+    <div class="w-64 bg-gray-100 py-4 px-2 flex flex-col items-center">
+        <img class="w-24 h-24 mb-2" src="{{.app.AppIcon}}" alt="{{.app.AppName}}">
+        <h1>{{.app.AppName}}</h1>
+        <span>{{if .app.AppAuthor}}{{.app.AppAuthor}}{{else}}佚名{{end}}</span>
+        <p>
+            {{.app.AppDesc}}
+        </p>
+        <a href="/app/{{.app.Code}}" class="text-blue-600">查看应用</a>
+
+        <!-- <hr class="my-2">
+        <h1>订阅此App作者的消息</h1>
+        <div class="flex m-2 items-center">
+            <input class="p-2 mr-2 w-42" type="email" name="email" placeholder="请输入邮箱...">
+            <a href="">订阅</a>
+        </div> -->
+    </div>
+    <div class="flex-1 ml-4">
+        <h1>
+            {{.activity.ActivityName}}
+        </h1>
+        <span class="text-gray-400">{{.activity.CreatedAt}}</span>
+        <hr class="my-4">
+        <div class="list">
+            <ol>
+                {{range .codes}}
+                <li class="flex p-2">
+                    <div class="flex-1">
+                        <span>{{.InviteCode}}</span>
+
+                    </div>
+                    <a href="" class="text-blue-600 mr-2">
+                        复制
+                    </a>
+
+                    {{if .Used}}
+                    <span class="text-gray-400">已使用</span>
+                    {{else}}
+                    <a href="/api/codes/{{.Code}}/used" class="mr-2">
+                        我已使用
+                    </a>
+                    {{end}}
+                </li>
+                <hr>
+                {{end}}
+            </ol>
+        </div>
+        {{template "paging" .paging}}
+    </div>
 </div>
 {{end}}

@@ -25,7 +25,7 @@ func main() {
 
 	model.DB.AutoMigrate(
 		&model.AppModel{}, &model.ActivityModel{}, &model.CodeModel{},
-		&model.User{},
+		&model.User{}, &model.CodeCopyLogModel{},
 	)
 
 	// 注册模版
@@ -36,7 +36,6 @@ func main() {
 	app.Use(static.Serve("/static", static.LocalFile("static", false)))
 
 	// 注册路由
-
 	router.Init(&app.RouterGroup)
 
 	// 没有注册的路由，不走全局中间件，TODO:
@@ -50,7 +49,7 @@ func main() {
 	response.RecoverErrHtml = true
 	response.RecoverRender = func(c *gin.Context, code int, result *response.Result) {
 		c.Status(code)
-		utils.Render(c, "error", map[string]interface{}{
+		utils.Render(c, "error", utils.UserParam{
 			"result": result,
 		})
 	}
