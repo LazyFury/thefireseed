@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"shareInviteCode/config"
-	"shareInviteCode/model"
+	"thefireseed/config"
+	"thefireseed/model"
 	"time"
 
 	"github.com/lazyfury/go-web-template/response"
@@ -50,6 +50,7 @@ var AuthOrNot gin.HandlerFunc = func(c *gin.Context) {
 		return
 	}
 	c.Set("user", user)
+	c.Next()
 }
 
 var (

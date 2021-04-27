@@ -1,23 +1,24 @@
 package main
 
 import (
-	"shareInviteCode/config"
-	"shareInviteCode/middleware"
-	"shareInviteCode/model"
-	"shareInviteCode/router"
-	"shareInviteCode/utils"
+	"fmt"
+	"thefireseed/config"
+	"thefireseed/middleware"
+	"thefireseed/model"
+	"thefireseed/router"
+	"thefireseed/utils"
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/kr/pretty"
 	gwt "github.com/lazyfury/go-web-template"
 	"github.com/lazyfury/go-web-template/response"
-	"github.com/lazyfury/go-web-template/tools/template/layout"
 )
 
 func main() {
 	// init
 	app := gwt.New()
-
+	pretty.Print(map[string]interface{}{"test": "pretty print"})
 	// 连接数据库
 	if err := model.DB.ConnectMysql(config.Global.Mysql.ToString()); err != nil {
 		panic(err)
@@ -28,23 +29,24 @@ func main() {
 		&model.User{}, &model.CodeCopyLogModel{},
 	)
 
+	app.PreUse(func(c *gin.Context) {
+		// pretty.Print(c.Request)
+	})
+
+	app.PreUse(middleware.AuthOrNot, gwt.DefaultCors)
+
 	// 注册模版
-	layout.InitBootstrap("templates", "*.html", utils.TemplateFuncs)
-	app.SetHTMLTemplate(layout.Bootstrap)
+	app.SetHTMLTemplate(utils.Tmpl)
 
 	// 注册静态目录
 	app.Use(static.Serve("/static", static.LocalFile("static", false)))
 
 	// 注册路由
-	router.Init(&app.RouterGroup)
+	app.InitRouter(router.Init)
 
 	// 没有注册的路由，不走全局中间件，TODO:
-	app.NoMethod(middleware.AuthOrNot, func(c *gin.Context) {
-		response.Error(response.NoMethod)
-	})
-	app.NoRoute(middleware.AuthOrNot, func(c *gin.Context) {
-		response.Error(response.NoRoute)
-	})
+	app.NoMethodUse(middleware.AuthOrNot)
+	app.NoRouteUse(middleware.AuthOrNot)
 	// 错误码配置
 	response.RecoverErrHtml = true
 	response.RecoverRender = func(c *gin.Context, code int, result *response.Result) {
@@ -53,7 +55,6 @@ func main() {
 			"result": result,
 		})
 	}
-
 	// run
-	app.Run()
+	app.Run(fmt.Sprintf(":%d", config.Global.Prot))
 }

@@ -1,7 +1,7 @@
 package router
 
 import (
-	"shareInviteCode/utils"
+	"thefireseed/utils"
 
 	"github.com/gin-gonic/gin"
 )

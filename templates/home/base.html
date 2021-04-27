@@ -1,1 +1,7 @@
-{{.Render}}
+{{template "header" .Header}}
+
+<div>
+    {{.RenderPage}}
+</div>
+
+{{template "footer" .Footer}}

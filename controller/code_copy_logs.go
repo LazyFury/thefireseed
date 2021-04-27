@@ -3,7 +3,7 @@ package controller
 import (
 	"io"
 	"net/http"
-	"shareInviteCode/model"
+	"thefireseed/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lazyfury/go-web-template/controller"

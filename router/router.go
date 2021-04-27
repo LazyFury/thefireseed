@@ -1,8 +1,8 @@
 package router
 
 import (
-	"shareInviteCode/controller"
-	"shareInviteCode/middleware"
+	"thefireseed/controller"
+	"thefireseed/middleware"
 
 	"github.com/gin-gonic/gin"
 )

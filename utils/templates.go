@@ -2,10 +2,12 @@ package utils
 
 import (
 	"fmt"
-	"shareInviteCode/controller"
-	"shareInviteCode/model"
+	"html/template"
+	"thefireseed/controller"
+	"thefireseed/model"
 
 	"github.com/gin-gonic/gin"
+	_template "github.com/lazyfury/go-web-template/tools/template"
 	"github.com/lazyfury/go-web-template/tools/template/layout"
 )
 
@@ -41,13 +43,16 @@ func (s *SEO) SetTitle(title string) *SEO {
 	return s
 }
 
-func parseRenderParams(args ...interface{}) (maps []map[string]interface{}, seo *SEO) {
+func parseRenderParams(args ...interface{}) (data UserParam, seo *SEO) {
+	data = UserParam{}
 	for _, arg := range args {
 		// data 里的数据
 		// log.Print(reflect.ValueOf(arg).Type())
-		data, ok := arg.(UserParam)
+		dataArr, ok := arg.(UserParam)
 		if ok {
-			maps = append(maps, data)
+			for k, v := range dataArr {
+				data[k] = v
+			}
 			continue
 		}
 
@@ -62,25 +67,31 @@ func parseRenderParams(args ...interface{}) (maps []map[string]interface{}, seo 
 	return
 }
 
+var Tmpl = template.Must(_template.ParseGlob(template.New("main").Funcs(TemplateFuncs), "./templates", "*.html"))
+var _layout = layout.New("home/base.html", Tmpl)
+
 // Render 渲染模版并提供公共参数
 // @params args   SEO,UserParam
 func Render(c *gin.Context, name string, args ...interface{}) {
-	maps, seo := parseRenderParams(args...)
-	layout := layout.New(name, maps...)
+	data, seo := parseRenderParams(args...)
 
 	user := controller.GetUserOrEmpty(c)
-
-	// user
-	layout.Header["user"] = user
 
 	// seo
 	if seo == nil {
 		seo = DefaultSEO()
 	}
-	layout.Header["seo"] = seo
 
-	// rander
-	layout.Render(c)
+	params := &layout.LayoutParams{
+		TemplateName: name,
+		Data:         data,
+		Header: map[string]interface{}{
+			"user": user,
+			"seo":  seo,
+		},
+	}
+
+	_layout.Render(c, params)
 }
 
 var TemplateFuncs = map[string]interface{}{

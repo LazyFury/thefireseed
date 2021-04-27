@@ -1,8 +1,8 @@
 package router
 
 import (
-	"shareInviteCode/model"
-	"shareInviteCode/utils"
+	"thefireseed/model"
+	"thefireseed/utils"
 
 	"github.com/gin-gonic/gin"
 	_model "github.com/lazyfury/go-web-template/model"

@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"shareInviteCode/model"
+	"thefireseed/model"
 
 	"github.com/lazyfury/go-web-template/controller"
 )

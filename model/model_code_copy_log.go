@@ -9,17 +9,27 @@ import (
 
 type CodeCopyLogModel struct {
 	model.Model
-	InviteCode string `json:"invite_code"`
-	UserCode   string `json:"user_code"`
+	InviteId string `json:"invite_code" gorm:"conment:邀请码的id;"` //邀请码的id
+	UserCode string `json:"user_code"  gorm:"conment:用户id;"`    //用户id
+	Data     string `json:"data" gorm:"conment:邀请码;"`           //邀请码
 }
 
 var _ model.Controller = &CodeCopyLogModel{}
 
 func (a *CodeCopyLogModel) Validator() error {
-	a.InviteCode = strings.Trim(a.InviteCode, " ")
-	if a.InviteCode == "" {
+	a.InviteId = strings.Trim(a.InviteId, " ")
+	if a.InviteId == "" {
 		response.Error("邀请码code不可空")
 	}
+
+	invite := &CodeModel{}
+	if err := DB.GetObjectOrNotFound(invite, map[string]interface{}{
+		"code": a.InviteId,
+	}); err != nil {
+		response.Error(err)
+	}
+
+	a.Data = invite.InviteCode
 	a.UserCode = strings.Trim(a.UserCode, " ")
 	if a.UserCode == "" {
 		response.Error("用户code不可空")

@@ -14,4 +14,5 @@ type configType struct {
 	Mysql  mysql.Mysql `json:"mysql"` // 数据库链接
 	Mail   mail.Mail   `json:"mail"`
 	Screct string      `json:"screct"`
+	Prot   int         `json:"port"`
 }

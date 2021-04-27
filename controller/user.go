@@ -2,10 +2,10 @@ package controller
 
 import (
 	"net/http"
-	"shareInviteCode/middleware"
-	"shareInviteCode/model"
 	"strconv"
 	"strings"
+	"thefireseed/middleware"
+	"thefireseed/model"
 	"time"
 
 	"github.com/gin-gonic/gin"

@@ -28,9 +28,8 @@
                 <li class="flex p-2">
                     <div class="flex-1">
                         <span>{{.InviteCode}}</span>
-
                     </div>
-                    <a href="" class="text-blue-600 mr-2">
+                    <a href="javascript:copy('{{.Code}}')" class="text-blue-600 mr-2">
                         复制
                     </a>
 
@@ -48,5 +47,23 @@
         </div>
         {{template "paging" .paging}}
     </div>
+
+    <script>
+        function copy(code) {
+            fetch("/api/code-copy-logs", {
+                method: "post", body: JSON.stringify({
+                    "invite_code": code,
+                }), headers: {
+                    "content-type": "application/json"
+                }
+            }).then(res => res.json()).then(res => {
+                let code = res.data.data
+                let r = confirm("激活码:" + code)
+                if (r) {
+                    navigator.clipboard.writeText(code)
+                }
+            })
+        }
+    </script>
 </div>
 {{end}}
