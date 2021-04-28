@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"thefireseed/config"
 	"thefireseed/middleware"
 	"thefireseed/model"
@@ -28,7 +29,6 @@ func main() {
 		&model.AppModel{}, &model.ActivityModel{}, &model.CodeModel{},
 		&model.User{}, &model.CodeCopyLogModel{},
 	)
-
 	app.PreUse(func(c *gin.Context) {
 		// pretty.Print(c.Request)
 	})
@@ -50,7 +50,7 @@ func main() {
 	// 错误码配置
 	response.RecoverErrHtml = true
 	response.RecoverRender = func(c *gin.Context, code int, result *response.Result) {
-		c.Status(code)
+		c.Status(http.StatusOK)
 		utils.Render(c, "error", utils.UserParam{
 			"result": result,
 		})

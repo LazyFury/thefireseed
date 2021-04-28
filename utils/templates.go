@@ -28,6 +28,11 @@ type (
 	}
 
 	UserParam map[string]interface{}
+
+	Link struct {
+		URL  string
+		Name string
+	}
 )
 
 func DefaultSEO() *SEO {
@@ -67,8 +72,22 @@ func parseRenderParams(args ...interface{}) (data UserParam, seo *SEO) {
 	return
 }
 
-var Tmpl = template.Must(_template.ParseGlob(template.New("main").Funcs(TemplateFuncs), "./templates", "*.html"))
-var _layout = layout.New("home/base.html", Tmpl)
+var (
+	Tmpl    = template.Must(_template.ParseGlob(template.New("main").Funcs(TemplateFuncs), "./templates", "*.html"))
+	_layout = layout.New("home/base.html", Tmpl)
+	nav     = []Link{
+		{"/", "首页"},
+		{"/fire", "火种🔥"},
+		{"/about", "关于我们"},
+	}
+	links = []Link{
+		{"/", "indiaDev"},
+		{"/", "v2ex"},
+		{"/", "juejin"},
+		{"/", "fish"},
+		{"/", "debian"},
+	}
+)
 
 // Render 渲染模版并提供公共参数
 // @params args   SEO,UserParam
@@ -88,6 +107,10 @@ func Render(c *gin.Context, name string, args ...interface{}) {
 		Header: map[string]interface{}{
 			"user": user,
 			"seo":  seo,
+			"nav":  nav,
+		},
+		Footer: map[string]interface{}{
+			"links": links,
 		},
 	}
 

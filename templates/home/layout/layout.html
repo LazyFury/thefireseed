@@ -14,9 +14,9 @@
     <meta name="author" content="{{.seo.Author}}">
 
     <!-- tailwind css  -->
-    <link href="https://unpkg.com/tailwindcss@^2.1.0/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="/static/css/tailwind.min.css" rel="stylesheet" />
     <!-- jquery  -->
-    <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.js"></script>
+    <!-- <script src="https://unpkg.com/jquery@3.6.0/dist/jquery.js"></script> -->
 </head>
 
 <body class="flex-column min-h-screen">
@@ -28,12 +28,18 @@
             </a>
             <nav class="mx-2 ml-4">
                 <ol class="flex">
-                    <li class="mr-2">
-                        <a href="/" class="{{if eq .path `/`}} text-blue-600 {{end}}">首页</a>
+
+                    {{$path := .path}}
+                    {{range .nav}}
+
+                    <li class="mr-4">
+                        <a href="{{.URL}}" class="{{if eq $path .URL}} text-blue-600 {{end}}"
+                            title="{{.Name}}">{{.Name}}</a>
                     </li>
-                    <li>
-                        <a href="/about" class="{{if eq .path `/about`}} text-blue-600 {{end}}">关于</a>
-                    </li>
+
+                    {{end}}
+
+
                 </ol>
             </nav>
             <nav class="ml-auto flex">
@@ -61,8 +67,15 @@
 
     <!-- footer  -->
     <footer>
-        <div class="w-full max-w-screen-lg mx-auto text-gray-400">
-            footer.
+        <div class="w-full max-w-screen-lg mx-auto">
+            <div class=" text-gray-400">
+                footer.
+            </div>
+            <div class="links ">
+                {{range .links}}
+                <a class="mr-2 mb-2" href="{{.URL}}" title="{{.Name}}" aria-label="{{.Name}}">{{.Name}}</a>
+                {{end}}
+            </div>
         </div>
     </footer>
 </body>

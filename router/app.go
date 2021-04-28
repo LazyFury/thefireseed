@@ -1,6 +1,8 @@
 package router
 
 import (
+	"fmt"
+	"thefireseed/controller"
 	"thefireseed/model"
 	"thefireseed/utils"
 
@@ -56,14 +58,26 @@ func activityDetail(c *gin.Context) {
 	}
 
 	page, size := _model.GetPagingParams(c)
-	codes := model.DB.GetObjectsOrEmpty(&[]model.CodeModel{}, map[string]interface{}{
+	codeModel := &model.CodeModel{}
+	copyModel := &model.CodeCopyLogModel{}
+	user := controller.GetUserOrEmpty(c)
+	codes := model.DB.GetObjectsOrEmpty(&[]model.ShowCodeModal{}, map[string]interface{}{
 		"activity_code": activity.Code,
 	}, func(db *gorm.DB) *gorm.DB {
 		return db.Order("used asc,created_at desc")
+	}, codeModel.Joins, func(db *gorm.DB) *gorm.DB {
+		return db.Joins(
+			fmt.Sprintf(
+				"left join (select 1 `copied`,`invite_id` from `%s` where `user_code`='%s') t2 on t2.`invite_id`=`%s`.`code`",
+				copyModel.TableName(),
+				user.Code,
+				codeModel.TableName(),
+			),
+		)
 	})
 	codes.Paging(page, size)
 
-	list := codes.Result.List.(*[]model.CodeModel)
+	list := codes.Result.List.(*[]model.ShowCodeModal)
 	for i, invite := range *list {
 		str := invite.InviteCode
 		strLen := len(str)

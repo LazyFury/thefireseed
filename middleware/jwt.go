@@ -36,7 +36,9 @@ var Auth gin.HandlerFunc = func(c *gin.Context) {
 		handleErr(c, "解析token错误")
 		return
 	}
-	c.Set("user", user)
+	if user.Code != "" {
+		c.Set("user", user)
+	}
 }
 
 // AuthOrNot 兼容前台接口 公开和用户的数据
@@ -49,7 +51,9 @@ var AuthOrNot gin.HandlerFunc = func(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	c.Set("user", user)
+	if user.Code != "" {
+		c.Set("user", user)
+	}
 	c.Next()
 }
 

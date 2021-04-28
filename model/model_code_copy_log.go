@@ -1,6 +1,7 @@
 package model
 
 import (
+	"net/http"
 	"strings"
 
 	"github.com/lazyfury/go-web-template/model"
@@ -33,6 +34,14 @@ func (a *CodeCopyLogModel) Validator() error {
 	a.UserCode = strings.Trim(a.UserCode, " ")
 	if a.UserCode == "" {
 		response.Error("用户code不可空")
+	}
+
+	copy := &CodeCopyLogModel{}
+	if err := DB.GetObjectOrNotFound(copy, map[string]interface{}{
+		"invite_id": invite.Code,
+		"user_code": a.UserCode,
+	}); err == nil {
+		response.Error(response.JSON(http.StatusAlreadyReported, "已经复制过了", copy))
 	}
 
 	return nil

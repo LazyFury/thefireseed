@@ -13,7 +13,7 @@ services:
             - mysql:mysql
         volumes:
             - ./:/root/app
-        command: /bin/bash -c  "cd /root/app/;air" #./run.sh ./debug_bin;
+        command: /bin/bash -c "cd /root/app/;air"
 
     mysql:
         image: mysql:8

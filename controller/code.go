@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"thefireseed/middleware"
 	"thefireseed/model"
 
 	"github.com/gin-gonic/gin"
@@ -25,7 +26,7 @@ func NewCodeController() *CodeController {
 func (d *CodeController) Install(g *gin.RouterGroup, path string) {
 	controller.Install(g, d, path)
 	router := g.Group(path)
-	router.GET("/:id/used", d.SetUsed)
+	router.GET("/:id/used", middleware.Auth, d.SetUsed)
 }
 
 func (d *CodeController) SetUsed(c *gin.Context) {
@@ -33,7 +34,6 @@ func (d *CodeController) SetUsed(c *gin.Context) {
 	if code == "" {
 		response.Error("code参数错误")
 	}
-
 	if err := model.DB.Model(&model.CodeModel{}).Where(map[string]interface{}{
 		"code": code,
 	}).Update("used", 1).Error; err != nil {

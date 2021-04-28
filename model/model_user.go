@@ -65,15 +65,18 @@ func (u *User) Validator() error {
 	}
 
 	// 查询重复的邮箱
-	if err := DB.GetObjectOrNotFound(&User{}, map[string]interface{}{
-		"email": u.Email,
-	}, func(db *gorm.DB) *gorm.DB {
-		if u.ID == 0 {
-			return db
+	u.Email = strings.Trim(u.Email, " ")
+	if u.Email != "" {
+		if err := DB.GetObjectOrNotFound(&User{}, map[string]interface{}{
+			"email": u.Email,
+		}, func(db *gorm.DB) *gorm.DB {
+			if u.ID == 0 {
+				return db
+			}
+			return db.Not(notCondition)
+		}); err == nil {
+			response.Error("已存在相同邮箱")
 		}
-		return db.Not(notCondition)
-	}); err == nil {
-		response.Error("已存在相同邮箱")
 	}
 
 	return nil

@@ -7,7 +7,7 @@
         <span>秒后返回</span>
     </div>
     <script>
-        $(document).ready(function () {
+        (document.ready = function () {
             var count = 3
             setInterval(() => {
                 document.querySelector(".count").innerHTML = count--
@@ -15,7 +15,7 @@
             setTimeout(() => {
                 history.go(-1)
             }, 3600)
-        })
+        })()
     </script>
 </div>
 
