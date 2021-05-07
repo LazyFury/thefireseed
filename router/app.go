@@ -60,41 +60,41 @@ func activityDetail(c *gin.Context) {
 	page, size := _model.GetPagingParams(c)
 	codeModel := &model.CodeModel{}
 	copyModel := &model.CodeCopyLogModel{}
+	usedModel := &model.CodeUsedLogModel{}
 	user := controller.GetUserOrEmpty(c)
 	codes := model.DB.GetObjectsOrEmpty(&[]model.ShowCodeModal{}, map[string]interface{}{
 		"activity_code": activity.Code,
 	}, func(db *gorm.DB) *gorm.DB {
-		return db.Order("used asc,created_at desc")
-	}, codeModel.Joins, func(db *gorm.DB) *gorm.DB {
-		return db.Joins(
-			fmt.Sprintf(
-				"left join (select 1 `copied`,`invite_id` from `%s` where `user_code`='%s') t2 on t2.`invite_id`=`%s`.`code`",
-				copyModel.TableName(),
-				user.Code,
-				codeModel.TableName(),
-			),
-		)
-	})
+		return db.Order("created_at desc")
+	}, codeModel.Joins,
+		// 当前用户是否复制过
+		func(db *gorm.DB) *gorm.DB {
+			return db.Joins(
+				fmt.Sprintf(
+					"left join (select 1 `copied`,`invite_id` `copy_invite_id` from `%s` where `user_code`='%s') clip_t on clip_t.`copy_invite_id`=`%s`.`code`",
+					copyModel.TableName(),
+					user.Code,
+					codeModel.TableName(),
+				),
+			)
+		},
+		func(db *gorm.DB) *gorm.DB {
+			return db.Joins(
+				fmt.Sprintf(
+					"left join (select 1 `used`,`invite_id` `used_invite_id` from `%s` where `user_code`='%s') used_t on used_t.`used_invite_id`=`%s`.`code`",
+					usedModel.TableName(),
+					user.Code,
+					codeModel.TableName(),
+				),
+			)
+		},
+	)
 	codes.Paging(page, size)
-
-	list := codes.Result.List.(*[]model.ShowCodeModal)
-	for i, invite := range *list {
-		str := invite.InviteCode
-		strLen := len(str)
-		if strLen >= 8 {
-			b := []byte{}
-			for i := 0; i < (strLen - 6); i++ {
-				b = append(b, []byte("*")...)
-			}
-			str = str[:3] + string(b) + str[strLen-3:]
-		}
-		(*list)[i].InviteCode = str
-	}
 
 	utils.Render(c, "activityDetail", utils.UserParam{
 		"activity": activity,
 		"app":      app,
-		"codes":    list,
+		"codes":    codeModel.Result(codes.Result.List).(*[]model.ShowCodeModal),
 		"paging":   codes.Pagination,
-	})
+	}, utils.DefaultSEO().SetTitle(fmt.Sprintf("%s %s", activity.ActivityName, app.AppName)))
 }

@@ -5,12 +5,12 @@ main
 *.out
 */static/upload
 log
+*.log
 __debug_bin
 go-runtime/
 go-path/
 docker/mysql/data
-config.json
-
+/*.json
 .vscode/
 .idea/
 debug_bin

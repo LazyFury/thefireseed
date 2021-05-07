@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"thefireseed/config"
 	"thefireseed/middleware"
 	"thefireseed/model"
@@ -11,15 +13,24 @@ import (
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
-	"github.com/kr/pretty"
 	gwt "github.com/lazyfury/go-web-template"
 	"github.com/lazyfury/go-web-template/response"
 )
 
+func redirectLog() *os.File {
+	f, _ := os.Create("_.log")
+	os.Stdout = f
+	os.Stderr = f
+	log.SetOutput(f)
+	log.SetFlags(log.Lshortfile)
+	return f
+}
 func main() {
+	f := redirectLog()
+	defer f.Close()
 	// init
 	app := gwt.New()
-	pretty.Print(map[string]interface{}{"test": "pretty print"})
+	// pretty.Println(map[string]interface{}{"test": "pretty print"})
 	// 连接数据库
 	if err := model.DB.ConnectMysql(config.Global.Mysql.ToString()); err != nil {
 		panic(err)
@@ -27,13 +38,23 @@ func main() {
 
 	model.DB.AutoMigrate(
 		&model.AppModel{}, &model.ActivityModel{}, &model.CodeModel{},
-		&model.User{}, &model.CodeCopyLogModel{},
+		&model.User{},
+		&model.CodeCopyLogModel{}, &model.CodeUsedLogModel{},
 	)
+
+	// log
+	app.PreUse(gin.LoggerWithConfig(gin.LoggerConfig{
+		Output: f,
+	}))
+
+	// cors
 	app.PreUse(func(c *gin.Context) {
-		// pretty.Print(c.Request)
+		gwt.Cors(c, &config.Application.CORS)
+		c.Next()
 	})
 
-	app.PreUse(middleware.AuthOrNot, gwt.DefaultCors)
+	// auth
+	app.PreUse(middleware.AuthOrNot)
 
 	// 注册模版
 	app.SetHTMLTemplate(utils.Tmpl)
@@ -44,10 +65,10 @@ func main() {
 	// 注册路由
 	app.InitRouter(router.Init)
 
-	// 没有注册的路由，不走全局中间件，TODO:
+	// 没有注册的路由，不走全局中间件
 	app.NoMethodUse(middleware.AuthOrNot)
 	app.NoRouteUse(middleware.AuthOrNot)
-	// 错误码配置
+	// 根据content-type为text/html时返回页面而不是json
 	response.RecoverErrHtml = true
 	response.RecoverRender = func(c *gin.Context, code int, result *response.Result) {
 		c.Status(http.StatusOK)
@@ -56,5 +77,5 @@ func main() {
 		})
 	}
 	// run
-	app.Run(fmt.Sprintf(":%d", config.Global.Prot))
+	app.Run(fmt.Sprintf(":%d", config.Application.Prot))
 }

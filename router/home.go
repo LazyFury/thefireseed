@@ -20,5 +20,8 @@ func homePage(c *gin.Context) {
 	utils.Render(c, "homePage", utils.UserParam{
 		"apps":   apps.Result.List.(*[]model.AppModel),
 		"paging": apps.Pagination,
-	}, utils.DefaultSEO().SetTitle("home"))
+	}, utils.DefaultSEO().SetTitle("home"), utils.Banner{
+		Title: `"火种计划"是一个很牛x的`,
+		Tips:  "为了人类的为了，进步，科技xxxxx",
+	})
 }

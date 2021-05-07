@@ -24,7 +24,7 @@
     <header class="bg-gray-100 p-2">
         <div class="sticky top-0 z-40 lg:z-50 w-full max-w-screen-lg mx-auto flex-none flex items-center">
             <a href="" title="">
-                <div class="flex-none py-1 px-2 bg-gray-200 text-2xl">logo</div>
+                <div class="flex-none py-1 px-2 bg-gray-200 text-2xl">{{.logo}}</div>
             </a>
             <nav class="mx-2 ml-4">
                 <ol class="flex">
@@ -62,6 +62,14 @@
         </div>
     </header>
     <!-- main  -->
+    {{if .banner}}
+    <div id="banner" class="bg-blue-500 w-full h-24">
+        <div class="w-full max-w-screen-lg mx-auto py-4 text-white">
+            <h1 class="text-2xl">{{.banner.Title}}</h1>
+            <span>{{.banner.Tips}}</span>
+        </div>
+    </div>
+    {{end}}
     <main class="w-full max-w-screen-lg mx-auto mt-2" style="min-height: 500px;">{{end}}
         {{define "footer"}}</main>
 

@@ -12,3 +12,7 @@ func login(c *gin.Context) {
 func reg(c *gin.Context) {
 	utils.Render(c, "reg")
 }
+
+func profile(c *gin.Context) {
+	utils.Render(c, "home/user/profile.html", utils.UserParam{})
+}

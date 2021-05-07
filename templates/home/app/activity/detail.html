@@ -26,12 +26,13 @@
             <ol>
                 {{range .codes}}
                 <li class="flex p-2">
-                    {{if not .Used}}
+                    {{if and (not .Used) (not .Copied)}}
                     🔥
                     {{end}}
                     <div class="flex-1">
                         <span>{{.InviteCode}}</span>
-                        <span class="text-gray-400 text-sm">({{.Count}})人已复制</span>
+                        <span class="text-gray-400 text-sm">({{.Count}})人已复制,</span>
+                        <!-- <span class="text-gray-400 text-sm">({{.UsedCount}})人已激活</span> -->
                     </div>
 
                     {{if .Copied}}
@@ -44,13 +45,18 @@
                     </a>
                     {{end}}
 
+                    {{if gt .UsedCount 0}}
+
                     {{if .Used}}
-                    <span class="text-gray-400 mr-2">已使用</span>
+                    <span class="text-gray-400 mr-2">我已使用</span>
                     {{else}}
-                    <a href="/api/codes/{{.Code}}/used" class="mr-2">
+                    <span class="text-gray-400 mr-2">已使用</span>
+                    {{end}}
+
+                    {{else}}
+                    <a href="javascript:confirmUsed('{{.Code}}')" class="mr-2">
                         确认激活
                     </a>
-
                     {{end}}
 
                 </li>
@@ -62,6 +68,17 @@
     </div>
 
     <script>
+        function confirmUsed(code) {
+            fetch("/api/code-used-logs", {
+                method: "post", body: JSON.stringify({
+                    "invite_code": code,
+                }), headers: {
+                    "content-type": "application/json"
+                }
+            }).then(res => res.json()).then(res => {
+                location.href = ""
+            })
+        }
         function copy(code) {
             fetch("/api/code-copy-logs", {
                 method: "post", body: JSON.stringify({
