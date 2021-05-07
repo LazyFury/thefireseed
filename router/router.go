@@ -1,9 +1,9 @@
 package router
 
 import (
-	"thefireseed/controller"
-	"thefireseed/middleware"
-	"thefireseed/utils"
+	"github.com/lazyfure/thefireseed/controller"
+	"github.com/lazyfure/thefireseed/middleware"
+	"github.com/lazyfure/thefireseed/utils"
 
 	"github.com/gin-gonic/gin"
 )

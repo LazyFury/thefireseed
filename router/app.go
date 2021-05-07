@@ -2,9 +2,10 @@ package router
 
 import (
 	"fmt"
-	"thefireseed/controller"
-	"thefireseed/model"
-	"thefireseed/utils"
+
+	"github.com/lazyfure/thefireseed/controller"
+	"github.com/lazyfure/thefireseed/model"
+	"github.com/lazyfure/thefireseed/utils"
 
 	"github.com/gin-gonic/gin"
 	_model "github.com/lazyfury/go-web-template/model"

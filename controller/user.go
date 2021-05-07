@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"thefireseed/middleware"
-	"thefireseed/model"
 	"time"
+
+	"github.com/lazyfure/thefireseed/middleware"
+	"github.com/lazyfure/thefireseed/model"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lazyfury/go-web-template/controller"

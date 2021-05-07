@@ -1,4 +1,4 @@
-module thefireseed
+module github.com/lazyfure/thefireseed
 
 go 1.16
 

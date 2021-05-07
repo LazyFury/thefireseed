@@ -3,8 +3,9 @@ package utils
 import (
 	"fmt"
 	"html/template"
-	"thefireseed/controller"
-	"thefireseed/model"
+
+	"github.com/lazyfure/thefireseed/controller"
+	"github.com/lazyfure/thefireseed/model"
 
 	"github.com/gin-gonic/gin"
 	_template "github.com/lazyfury/go-web-template/tools/template"

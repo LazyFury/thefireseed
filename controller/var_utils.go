@@ -2,7 +2,8 @@ package controller
 
 import (
 	"net/http"
-	"thefireseed/model"
+
+	"github.com/lazyfure/thefireseed/model"
 
 	"github.com/gin-gonic/gin"
 	_model "github.com/lazyfury/go-web-template/model"

@@ -1,7 +1,7 @@
 package router
 
 import (
-	"thefireseed/utils"
+	"github.com/lazyfure/thefireseed/utils"
 
 	"github.com/gin-gonic/gin"
 )

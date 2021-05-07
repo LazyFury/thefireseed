@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"thefireseed/config"
-	"thefireseed/model"
 	"time"
+
+	"github.com/lazyfure/thefireseed/config"
+	"github.com/lazyfure/thefireseed/model"
 
 	"github.com/lazyfury/go-web-template/response"
 

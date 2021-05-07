@@ -5,11 +5,12 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"thefireseed/config"
-	"thefireseed/middleware"
-	"thefireseed/model"
-	"thefireseed/router"
-	"thefireseed/utils"
+
+	"github.com/lazyfure/thefireseed/config"
+	"github.com/lazyfure/thefireseed/middleware"
+	"github.com/lazyfure/thefireseed/model"
+	"github.com/lazyfure/thefireseed/router"
+	"github.com/lazyfure/thefireseed/utils"
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"

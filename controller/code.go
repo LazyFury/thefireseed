@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"thefireseed/model"
+	"github.com/lazyfure/thefireseed/model"
 
 	"github.com/lazyfury/go-web-template/controller"
 )
